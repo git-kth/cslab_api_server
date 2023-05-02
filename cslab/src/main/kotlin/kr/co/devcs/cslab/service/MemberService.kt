@@ -5,13 +5,16 @@ import kr.co.devcs.cslab.entity.Member
 import kr.co.devcs.cslab.repository.MemberRepository
 import kr.co.devcs.cslab.security.MemberRole
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Service
 class MemberService(
-        @Autowired val memberRepository: MemberRepository
+        @Autowired val memberRepository: MemberRepository,
+        @Autowired val passwordEncoder: PasswordEncoder
 ) {
     fun checkEmailDuplication(email: String) = memberRepository.existsByEmail(email)
 
@@ -21,13 +24,13 @@ class MemberService(
 
     @Transactional
     fun createMember(email: String, password: String, sno: String, name: String, birthDate: String) {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         memberRepository.save(Member(
                 email = email,
-                password = password,
+                password = passwordEncoder.encode(password),
                 sno = sno,
                 name = name,
-                birthDate = LocalDateTime.parse("$birthDate 00:00:00", formatter),
+                birthDate = LocalDate.parse(birthDate, formatter),
                 roles = mutableSetOf(MemberRole.USER),
                 isAdmin = true,
                 isEnabled = true
