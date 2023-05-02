@@ -1,6 +1,7 @@
 package kr.co.devcs.cslab.entity
 
 import jakarta.persistence.*
+import kr.co.devcs.cslab.security.MemberRole
 import org.hibernate.annotations.CreationTimestamp
 import java.time.LocalDateTime
 
