@@ -3,6 +3,7 @@ package kr.co.devcs.cslab.entity
 import jakarta.persistence.*
 import kr.co.devcs.cslab.security.MemberRole
 import org.hibernate.annotations.CreationTimestamp
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Entity
@@ -21,7 +22,7 @@ class Member (
 
         val name: String,
 
-        val birthDate: LocalDateTime,
+        val birthDate: LocalDate,
 
         @Enumerated(EnumType.STRING)
         @ElementCollection(fetch = FetchType.EAGER)
