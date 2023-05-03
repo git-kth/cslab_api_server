@@ -39,7 +39,7 @@ class MemberService(
 fun changePassword(email: String, authNum: String, newPassword: String, confirmPassword: String, session: HttpSession): ChangePasswordResponse {
     val member = memberRepository.findByEmail(email) ?: return ChangePasswordResponse(false, "해당 이메일의 회원이 존재하지 않습니다.")
     val sessionAuthNum = session.getAttribute("authNum") as? String ?: return ChangePasswordResponse(false, "인증번호를 먼저 입력해주세요.")
-    if (authNum != sessionAuthNum) {
+    if (!emailService.isValidEmailCode(email,authNum)){
         return ChangePasswordResponse(false, "인증번호가 일치하지 않습니다.")
     }
     if (newPassword != confirmPassword) {

@@ -5,6 +5,7 @@ import kr.co.devcs.cslab.data.ChangePasswordRequest
 import kr.co.devcs.cslab.data.ChangePasswordResponse
 import kr.co.devcs.cslab.dto.MemberDto
 import kr.co.devcs.cslab.service.MemberService
+import kr.co.devcs.cslab.util.EmailService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.BindingResult
@@ -19,10 +20,13 @@ import java.util.Timer
 import java.util.TimerTask
 import java.util.UUID
 
+
 @RestController
 @RequestMapping("/api/member")
 class MemberController(
-        @Autowired val memberService: MemberService
+        @Autowired val memberService: MemberService,
+        @Autowired val emailService: EmailService
+
 ) {
     @PostMapping("/signup")
     fun signup(@RequestBody @Validated memberDto: MemberDto, bindingResult: BindingResult): ResponseEntity<String> {
@@ -67,22 +71,15 @@ class MemberController(
         return ResponseEntity.ok(email)
     }
 
+
     @PostMapping("/find-password")
-    fun findPassword(@RequestBody memberDto: MemberDto, session: HttpSession): ResponseEntity<String> {
+    fun findPassword(@RequestBody memberDto: MemberDto,session: HttpSession): ResponseEntity<String> {
         val email = memberDto.email ?: return ResponseEntity.badRequest().body("이메일을 입력해 주세요.")
-        memberService.findByEmail(email) ?: return ResponseEntity.badRequest().body("가입된 회원이 없습니다.")
-        val authNum = UUID.randomUUID().toString().substring(0, 10)
-        session.setAttribute("authNum", authNum)
+        val member = memberService.findByEmail(email) ?: return ResponseEntity.badRequest().body("가입된 회원이 없습니다.")
+        val authCode = emailService.sendEmailForm(email, member.name)
+        session.setAttribute("authNum", authCode)
         session.setAttribute("email",email)
-        val timer = Timer()
-        timer.schedule(object : TimerTask() {
-            override fun run() {
-                session.removeAttribute("authNum")
-            }
-        }, 5 * 60 * 1000)
-
-
-        return ResponseEntity.ok(authNum)
+        return ResponseEntity.ok(authCode)
     }
 
 
