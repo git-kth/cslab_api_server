@@ -6,6 +6,7 @@ import kr.co.devcs.cslab.data.ChangePasswordResponse
 import kr.co.devcs.cslab.entity.Member
 import kr.co.devcs.cslab.repository.MemberRepository
 import kr.co.devcs.cslab.security.MemberRole
+import kr.co.devcs.cslab.util.EmailService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -18,6 +19,7 @@ import java.util.UUID
 @Service
 class MemberService(
         @Autowired val memberRepository: MemberRepository,
+        @Autowired val emailService: EmailService,
         @Autowired val passwordEncoder: PasswordEncoder
 ) {
     fun checkEmailDuplication(email: String) = memberRepository.existsByEmail(email)
@@ -54,6 +56,7 @@ fun changePassword(email: String, authNum: String, newPassword: String, confirmP
 
     @Transactional
     fun createMember(email: String, password: String, sno: String, name: String, birthDate: String) {
+        emailService.sendEmailForm(email, name)
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         memberRepository.save(Member(
                 email = email,
@@ -63,7 +66,7 @@ fun changePassword(email: String, authNum: String, newPassword: String, confirmP
                 birthDate = LocalDate.parse(birthDate, formatter),
                 roles = mutableSetOf(MemberRole.USER),
                 isAdmin = true,
-                isEnabled = true
+                isEnabled = false
         ))
     }
 }
