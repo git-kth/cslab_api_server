@@ -28,6 +28,9 @@ dependencies {
 
 	// validation
 	implementation("org.springframework.boot:spring-boot-starter-validation")
+
+	// sendgrid
+	implementation("com.sendgrid:sendgrid-java:4.9.3")
 }
 
 tasks.withType<KotlinCompile> {
