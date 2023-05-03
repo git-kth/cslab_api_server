@@ -38,7 +38,7 @@ class EmailService {
         return authCode
     }
 
-    fun sendEmailForm(email: String, name: String) {
+    fun sendEmailForm(email: String, name: String): String {
         val from = Email("admin@em9806.devcs.co.kr", "CSLAB 관리자")
         val subject = "CSLAB APP 인증코드 발송"
         val to = Email(email)
@@ -54,6 +54,7 @@ class EmailService {
         println(response.statusCode)
         println(response.body)
         println(response.headers)
+        return authCode
     }
 
     fun isValidEmailCode(email: String, emailCode: String): Boolean {
