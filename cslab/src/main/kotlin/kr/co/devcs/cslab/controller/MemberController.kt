@@ -1,5 +1,8 @@
 package kr.co.devcs.cslab.controller
 
+import jakarta.servlet.http.HttpSession
+import kr.co.devcs.cslab.data.ChangePasswordRequest
+import kr.co.devcs.cslab.data.ChangePasswordResponse
 import kr.co.devcs.cslab.dto.MemberDto
 import kr.co.devcs.cslab.service.MemberService
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,6 +14,10 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.time.LocalDate
+import java.util.Timer
+import java.util.TimerTask
+import java.util.UUID
 
 @RestController
 @RequestMapping("/api/member")
@@ -48,4 +55,52 @@ class MemberController(
         memberService.createMember(memberDto.email, memberDto.password1, memberDto.sno, memberDto.name!!, memberDto.birthDate!!)
         return ResponseEntity.ok("signup success")
     }
+
+
+    @PostMapping("/find-email")
+    fun findId(
+        @RequestBody memberDto: MemberDto
+    ): ResponseEntity<String> {
+        val sno = memberDto.sno ?: return ResponseEntity.badRequest().body("학번을 입력해주세요.")
+        val birthDate = memberDto.birthDate ?: return ResponseEntity.badRequest().body("생년월일을 입력해주세요.")
+        val email = memberService.findEmailBySnoAndBirthDate(sno, birthDate) ?: return ResponseEntity.notFound().build()
+        return ResponseEntity.ok(email)
+    }
+
+    @PostMapping("/find-password")
+    fun findPassword(@RequestBody memberDto: MemberDto, session: HttpSession): ResponseEntity<String> {
+        val email = memberDto.email ?: return ResponseEntity.badRequest().body("이메일을 입력해 주세요.")
+        memberService.findByEmail(email) ?: return ResponseEntity.badRequest().body("가입된 회원이 없습니다.")
+        val authNum = UUID.randomUUID().toString().substring(0, 10)
+        session.setAttribute("authNum", authNum)
+        session.setAttribute("email",email)
+        val timer = Timer()
+        timer.schedule(object : TimerTask() {
+            override fun run() {
+                session.removeAttribute("authNum")
+            }
+        }, 5 * 60 * 1000)
+
+
+        return ResponseEntity.ok(authNum)
+    }
+
+
+    @PostMapping("/change-password")
+    fun changePassword(@RequestBody changePasswordRequest: ChangePasswordRequest, session: HttpSession): ResponseEntity<ChangePasswordResponse> {
+        val email = changePasswordRequest.email ?: return ResponseEntity.badRequest().body(ChangePasswordResponse(false, "이메일을 입력해 주세요."))
+        val authNum = changePasswordRequest.authNum ?: return ResponseEntity.badRequest().body(ChangePasswordResponse(false, "인증번호를 입력해 주세요."))
+        val newPassword = changePasswordRequest.newPassword ?: return ResponseEntity.badRequest().body(ChangePasswordResponse(false, "새로운 비밀번호를 입력해 주세요."))
+        val confirmPassword = changePasswordRequest.confirmPassword ?: return ResponseEntity.badRequest().body(ChangePasswordResponse(false, "새로운 비밀번호 확인을 입력해 주세요."))
+
+        val response = memberService.changePassword(email, authNum, newPassword, confirmPassword, session)
+        if (response.success) {
+//            session.removeAttribute("authNum")
+            session.invalidate()
+            return ResponseEntity.ok(response)
+        } else {
+            return ResponseEntity.badRequest().body(response)
+        }
+    }
 }
+

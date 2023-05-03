@@ -15,7 +15,7 @@ class Member (
         @Column(unique = true)
         val email: String,
 
-        val password: String,
+        var password: String,
 
         @Column(unique = true)
         val sno: String,
