@@ -17,6 +17,7 @@ import java.util.*
 @Service
 class EmailService {
     data class AuthCode(val code: String, val createdAt: LocalDateTime = LocalDateTime.now())
+
     private val authCodes = mutableMapOf<String, AuthCode>()
 
     @Value("\${SENDGRID_API_KEY}")
@@ -25,8 +26,8 @@ class EmailService {
     fun createEmailCode(email: String): String {
         val random = Random()
         val key = StringBuffer()
-        for (i in 0 .. 7) {
-            when(random.nextInt(3)) {
+        for (i in 0..7) {
+            when (random.nextInt(3)) {
                 0 -> key.append((random.nextInt(26) + 97).toChar())
                 1 -> key.append((random.nextInt(26) + 65).toChar())
                 2 -> key.append((random.nextInt(9)))

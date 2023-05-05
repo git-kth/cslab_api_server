@@ -7,33 +7,33 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Entity
-class Member (
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        val id: Long? = null,
+class Member(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long? = null,
 
-        @Column(unique = true)
-        val email: String,
+    @Column(unique = true)
+    val email: String,
 
-        val password: String,
+    val password: String,
 
-        @Column(unique = true)
-        val sno: String,
+    @Column(unique = true)
+    val sno: String,
 
-        val name: String,
+    val name: String,
 
-        val birthDate: LocalDate,
+    val birthDate: LocalDate,
 
-        @Enumerated(EnumType.STRING)
-        @ElementCollection(fetch = FetchType.EAGER)
-        val roles: MutableSet<MemberRole>,
+    @Enumerated(EnumType.STRING)
+    @ElementCollection(fetch = FetchType.EAGER)
+    val roles: MutableSet<MemberRole>,
 
-        @CreationTimestamp
-        val createdDate: LocalDateTime = LocalDateTime.now(),
+    @CreationTimestamp
+    val createdDate: LocalDateTime = LocalDateTime.now(),
 
-        @Column(nullable = false)
-        val isAdmin: Boolean = false,
+    @Column(nullable = false)
+    val isAdmin: Boolean = false,
 
-        @Column(nullable = false)
-        val isEnabled: Boolean = false
+    @Column(nullable = false)
+    val isEnabled: Boolean = false
 )
