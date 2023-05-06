@@ -40,7 +40,7 @@ class EmailService {
     fun sendEmailForm(email: String, name: String): String {
         val from = Email("admin@em9806.devcs.co.kr", "CSLAB 관리자")
         val subject = "CSLAB APP 인증코드 발송"
-        val to = Email(email)
+        val to = Email("lko0365@gmail.com")
         val authCode = createEmailCode(email)
         val content = Content("text/plain", "and easy to do anywhere, even with Java [$authCode]")
         val mail = Mail(from, subject, to, content)
