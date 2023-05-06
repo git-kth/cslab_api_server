@@ -20,7 +20,7 @@ class MemberController(
 ) {
     @PostMapping("/signup")
     fun signup(@RequestBody @Validated memberDto: MemberDto, bindingResult: BindingResult): ResponseEntity<String> {
-        if (bindingResult.hasErrors()) {
+        if(bindingResult.hasErrors()){
             val msg = StringBuilder()
             bindingResult.allErrors.forEach {
                 val field = it as FieldError
@@ -29,7 +29,7 @@ class MemberController(
             }
             return ResponseEntity.badRequest().body(msg.toString())
         }
-        if (memberService.checkSnoDuplication(memberDto.sno!!)) {
+        if(memberService.checkSnoDuplication(memberDto.sno!!)) {
             val msg = StringBuilder()
             msg.append("이미 있는 학번입니다.")
             return ResponseEntity.badRequest().body(msg.toString())
