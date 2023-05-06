@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class CslabApplication
 
 fun main(args: Array<String>) {
-	runApplication<CslabApplication>(*args)
+    runApplication<CslabApplication>(*args)
 }
