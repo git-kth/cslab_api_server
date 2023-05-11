@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.validation.BindingResult
 import org.springframework.validation.FieldError
 import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -37,6 +38,7 @@ class MemberController(
             }
             return ResponseEntity.badRequest().body(msg.toString())
         }
+
         if (memberService.checkSnoDuplication(memberDto.sno!!)) {
             val msg = StringBuilder()
             msg.append("이미 있는 학번입니다.")
@@ -82,7 +84,7 @@ class MemberController(
     ): ResponseEntity<String> {
         val email = memberDto.email ?: return ResponseEntity.badRequest().body("이메일을 입력해 주세요.")
         val member =
-                memberService.findByEmail(email)
+                memberService.findByEmail(email).get()
                         ?: return ResponseEntity.badRequest().body("가입된 회원이 없습니다.")
         val authCode = emailService.sendEmailForm(email, member.name)
         session.setAttribute("authNum", authCode)
@@ -136,7 +138,11 @@ class MemberController(
                 msg.append("${field.field} : $message\n")
             }
         }
-
+        if (!memberService.checkEmailDuplication(loginDto.email!!)) return ResponseEntity.badRequest().body("이메일이 존재하지 않습니다.")
+        if (!memberService.checkLoginPassword(loginDto.email!!, loginDto.password!!)) return ResponseEntity.badRequest().body("패스워드가 존재하지 않습니다.")
         return ResponseEntity.ok(memberService.login(loginDto))
     }
+
+    @GetMapping("/auth")
+    fun security() = "success"
 }

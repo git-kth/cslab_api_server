@@ -19,7 +19,7 @@ class EmailService {
 
     private val authCodes = mutableMapOf<String, AuthCode>()
 
-    @Value("\${SENDGRID_API_KEY}") lateinit var api_key: String
+    @Value("\${SENDGRID_API_KEY}") lateinit var API_KEY: String
 
     fun createEmailCode(email: String): String {
         val random = Random()
@@ -40,11 +40,11 @@ class EmailService {
     fun sendEmailForm(email: String, name: String): String {
         val from = Email("admin@em9806.devcs.co.kr", "CSLAB 관리자")
         val subject = "CSLAB APP 인증코드 발송"
-        val to = Email("lko0365@gmail.com")
+        val to = Email(email)
         val authCode = createEmailCode(email)
         val content = Content("text/plain", "and easy to do anywhere, even with Java [$authCode]")
         val mail = Mail(from, subject, to, content)
-        val sg = SendGrid(api_key)
+        val sg = SendGrid(API_KEY)
         val request = Request()
         request.method = Method.POST
         request.endpoint = "mail/send"

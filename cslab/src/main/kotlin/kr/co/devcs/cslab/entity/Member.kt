@@ -10,7 +10,7 @@ import org.hibernate.annotations.CreationTimestamp
 class Member(
         @Id @GeneratedValue(strategy = GenerationType.IDENTITY) val id: Long? = null,
         @Column(unique = true) val email: String,
-        val password: String,
+        var password: String,
         @Column(unique = true) val sno: String,
         val name: String,
         val birthDate: LocalDate,
