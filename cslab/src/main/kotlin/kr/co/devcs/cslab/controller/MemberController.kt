@@ -60,14 +60,14 @@ class MemberController(
         return ResponseEntity.ok("signup success")
     }
 
-
     @PostMapping("/find-email")
-    fun findId(
-        @RequestBody memberDto: MemberDto
-    ): ResponseEntity<String> {
+    fun findId(@RequestBody memberDto: MemberDto): ResponseEntity<String> {
         val sno = memberDto.sno ?: return ResponseEntity.badRequest().body("학번을 입력해주세요.")
-        val birthDate = memberDto.birthDate ?: return ResponseEntity.badRequest().body("생년월일을 입력해주세요.")
-        val email = memberService.findEmailBySnoAndBirthDate(sno, birthDate) ?: return ResponseEntity.notFound().build()
+        val birthDate =
+            memberDto.birthDate ?: return ResponseEntity.badRequest().body("생년월일을 입력해주세요.")
+        val email =
+            memberService.findEmailBySnoAndBirthDate(sno, birthDate)
+                ?: return ResponseEntity.notFound().build()
         return ResponseEntity.ok(email)
     }
 
