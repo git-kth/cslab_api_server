@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f7f0c0fd-a866-4f55-aa7b-1b6c3fc787aa" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/dto/LoginDto.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/jwt/JwtFilter.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/jwt/JwtUtils.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/security/MemberDetails.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/service/MemberDetailsService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/cslab_api_server.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cslab/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/cslab/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cslab/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/cslab/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/CslabApplication.kt" beforeDir="false" afterPath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/CslabApplication.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/controller/MemberController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/controller/MemberController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/dto/MemberDto.kt" beforeDir="false" afterPath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/dto/MemberDto.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/entity/Member.kt" beforeDir="false" afterPath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/entity/Member.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/repository/MemberRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/repository/MemberRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/security/MemberRole.kt" beforeDir="false" afterPath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/security/MemberRole.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/security/SecurityConfig.kt" beforeDir="false" afterPath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/security/SecurityConfig.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/service/MemberService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/service/MemberService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/util/EmailService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/util/EmailService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cslab/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/cslab/src/main/resources/application.properties" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$/cslab">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$/cslab">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="cslab" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="cslab" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="cslab" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="application" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="cslab" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="build" type="c8890929:TasksNode$1" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+        <option value="Kotlin File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="signup" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2PGo416JNUOLbsK3RPWvx7tpus7" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;05080722db8e28fdbc2645dc3513e736&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
+      <recent name="kr.co.devcs.cslab.data" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Gradle.cslab [bootRun]">
+    <configuration name="cslab [bootRun]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/cslab" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="bootRun" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="cslab" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="cslab" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CslabApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="cslab.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="kr.co.devcs.cslab.CslabApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.cslab [bootRun]" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f7f0c0fd-a866-4f55-aa7b-1b6c3fc787aa" name="Changes" comment="" />
+      <created>1683092586975</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1683092586975</updated>
+      <workItem from="1683092588564" duration="2903000" />
+      <workItem from="1683095710615" duration="2046000" />
+      <workItem from="1683098271129" duration="1669000" />
+      <workItem from="1683100125399" duration="2622000" />
+      <workItem from="1683107149415" duration="5376000" />
+      <workItem from="1683113183401" duration="1691000" />
+      <workItem from="1683115037723" duration="794000" />
+      <workItem from="1683115859355" duration="4668000" />
+      <workItem from="1683120602285" duration="300000" />
+      <workItem from="1683174207659" duration="17000" />
+      <workItem from="1683179266660" duration="148000" />
+      <workItem from="1683622189535" duration="199000" />
+      <workItem from="1683691533376" duration="568000" />
+      <workItem from="1683703545055" duration="12000" />
+      <workItem from="1683710798846" duration="674000" />
+      <workItem from="1683897996714" duration="46000" />
+      <workItem from="1683899671401" duration="51000" />
+      <workItem from="1683900545280" duration="306000" />
+      <workItem from="1683900864885" duration="644000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="id_pw_find" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

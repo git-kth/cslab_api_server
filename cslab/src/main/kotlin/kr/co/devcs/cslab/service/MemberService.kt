@@ -3,30 +3,34 @@ package kr.co.devcs.cslab.service
 import jakarta.servlet.http.HttpSession
 import jakarta.transaction.Transactional
 import kr.co.devcs.cslab.data.ChangePasswordResponse
+import kr.co.devcs.cslab.dto.LoginDto
 import kr.co.devcs.cslab.entity.Member
+import kr.co.devcs.cslab.jwt.JwtUtils
 import kr.co.devcs.cslab.repository.MemberRepository
 import kr.co.devcs.cslab.security.MemberRole
 import kr.co.devcs.cslab.util.EmailService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import org.springframework.web.servlet.function.EntityResponse
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Optional
-import java.util.UUID
+import java.util.*
 
 @Service
 class MemberService(
-        @Autowired val memberRepository: MemberRepository,
-        @Autowired val emailService: EmailService,
-        @Autowired val passwordEncoder: PasswordEncoder
+    @Autowired val memberRepository: MemberRepository,
+    @Autowired val emailService: EmailService,
+    @Autowired val passwordEncoder: PasswordEncoder,
+    @Autowired val jwtUtils: JwtUtils
 ) {
     fun checkEmailDuplication(email: String) = memberRepository.existsByEmail(email)
 
     fun checkSnoDuplication(sno: String) = memberRepository.existsBySno(sno)
 
     fun checkPassword(password1: String, password2: String) = password1 == password2
+
+    fun checkLoginPassword(email: String, password: String) = passwordEncoder.matches(password, findByEmail(email).get().password)
 
     fun findEmailBySnoAndBirthDate(sno: String, birthDate: String): String? {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
@@ -37,7 +41,7 @@ class MemberService(
     fun findByEmail(email: String) = memberRepository.findByEmail(email)
 
 fun changePassword(email: String, authNum: String, newPassword: String, confirmPassword: String, session: HttpSession): ChangePasswordResponse {
-    val member = memberRepository.findByEmail(email) ?: return ChangePasswordResponse(false, "해당 이메일의 회원이 존재하지 않습니다.")
+    val member = memberRepository.findByEmail(email).get() ?: return ChangePasswordResponse(false, "해당 이메일의 회원이 존재하지 않습니다.")
     val sessionAuthNum = session.getAttribute("authNum") as? String ?: return ChangePasswordResponse(false, "인증번호를 먼저 입력해주세요.")
     if (!emailService.isValidEmailCode(email,authNum)){
         return ChangePasswordResponse(false, "인증번호가 일치하지 않습니다.")
@@ -58,15 +62,19 @@ fun changePassword(email: String, authNum: String, newPassword: String, confirmP
     fun createMember(email: String, password: String, sno: String, name: String, birthDate: String) {
         emailService.sendEmailForm(email, name)
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        memberRepository.save(Member(
+        memberRepository.save(
+            Member(
                 email = email,
                 password = passwordEncoder.encode(password),
                 sno = sno,
                 name = name,
                 birthDate = LocalDate.parse(birthDate, formatter),
-                roles = mutableSetOf(MemberRole.USER),
+                roles = mutableSetOf(MemberRole.ROLE_USER),
                 isAdmin = true,
                 isEnabled = false
-        ))
+            )
+        )
     }
+
+    fun login(loginDto: LoginDto) = jwtUtils.generateJwtToken(loginDto.email!!)
 }
