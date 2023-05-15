@@ -83,13 +83,16 @@ class MemberController(
         session: HttpSession
     ): ResponseEntity<String> {
         val email = memberDto.email ?: return ResponseEntity.badRequest().body("이메일을 입력해 주세요.")
-        val member =
-            memberService.findByEmail(email).get()
-                ?: return ResponseEntity.badRequest().body("가입된 회원이 없습니다.")
-        val authCode = emailService.sendEmailForm(email, member.name)
-        session.setAttribute("authNum", authCode)
-        session.setAttribute("email", email)
-        return ResponseEntity.ok(authCode)
+        val memberOptional = memberService.findByEmail(email)
+        return if (memberOptional.isPresent) {
+            val member = memberOptional.get()
+            val authCode = emailService.sendEmailForm(email, member.name)
+            session.setAttribute("authNum", authCode)
+            session.setAttribute("email", email)
+            ResponseEntity.ok("ok")
+        } else {
+            ResponseEntity.badRequest().body("가입된 회원이 없습니다.")
+        }
     }
 
     @PostMapping("/change-password")

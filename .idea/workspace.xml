@@ -5,31 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f7f0c0fd-a866-4f55-aa7b-1b6c3fc787aa" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/dto/LoginDto.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/jwt/JwtFilter.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/jwt/JwtUtils.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/security/MemberDetails.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/service/MemberDetailsService.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/cslab_api_server.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cslab/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/cslab/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cslab/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/cslab/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/CslabApplication.kt" beforeDir="false" afterPath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/CslabApplication.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/controller/MemberController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/controller/MemberController.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/dto/MemberDto.kt" beforeDir="false" afterPath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/dto/MemberDto.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/entity/Member.kt" beforeDir="false" afterPath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/entity/Member.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/repository/MemberRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/repository/MemberRepository.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/security/MemberRole.kt" beforeDir="false" afterPath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/security/MemberRole.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/security/SecurityConfig.kt" beforeDir="false" afterPath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/security/SecurityConfig.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/service/MemberService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/service/MemberService.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/util/EmailService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/util/EmailService.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cslab/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/cslab/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cslab/src/main/kotlin/kr/co/devcs/cslab/controller/MemberController.kt.orig" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,6 +77,7 @@
   </component>
   <component name="ProjectId" id="2PGo416JNUOLbsK3RPWvx7tpus7" />
   <component name="ProjectViewState">
+    <option name="compactDirectories" value="true" />
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
@@ -198,7 +177,11 @@
       <workItem from="1683897996714" duration="46000" />
       <workItem from="1683899671401" duration="51000" />
       <workItem from="1683900545280" duration="306000" />
-      <workItem from="1683900864885" duration="644000" />
+      <workItem from="1683900864885" duration="1404000" />
+      <workItem from="1683949298015" duration="160000" />
+      <workItem from="1684143672782" duration="958000" />
+      <workItem from="1684147587248" duration="1246000" />
+      <workItem from="1684149095453" duration="286000" />
     </task>
     <servers />
   </component>
