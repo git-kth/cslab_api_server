@@ -12,7 +12,7 @@ import java.util.*
 @Service
 class MemberDetailsService(@Autowired private val memberRepository: MemberRepository) : UserDetailsService {
     override fun loadUserByUsername(email: String): UserDetails {
-        val member: Optional<Member> = memberRepository.findByEmail(email)
-        return MemberDetails(member.get())
+        val member: Member = memberRepository.findByEmail(email).get()
+        return MemberDetails(member.email, member.password, member.isEnabled)
     }
 }

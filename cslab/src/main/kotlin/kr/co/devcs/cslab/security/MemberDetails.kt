@@ -5,31 +5,12 @@ import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.AuthorityUtils
 import org.springframework.security.core.userdetails.UserDetails
 
-class MemberDetails(private val member: Member) : UserDetails {
-    override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        return AuthorityUtils.createAuthorityList()
-    }
-
-    override fun getPassword(): String {
-        return member.password
-    }
-
-    override fun getUsername(): String {
-        return member.name    }
-
-    override fun isAccountNonExpired(): Boolean {
-        return true
-    }
-
-    override fun isAccountNonLocked(): Boolean {
-        return true
-    }
-
-    override fun isCredentialsNonExpired(): Boolean {
-        return true
-    }
-
-    override fun isEnabled(): Boolean {
-        return member.isEnabled
-    }
+class MemberDetails(private val email: String, private val password: String, private val isEnabled : Boolean) : UserDetails {
+    override fun getAuthorities(): MutableList<GrantedAuthority> = AuthorityUtils.createAuthorityList()
+    override fun getPassword() = password
+    override fun getUsername() = email
+    override fun isAccountNonExpired() = true
+    override fun isAccountNonLocked() = true
+    override fun isCredentialsNonExpired() = true
+    override fun isEnabled() = isEnabled
 }
