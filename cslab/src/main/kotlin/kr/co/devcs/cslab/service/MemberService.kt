@@ -27,6 +27,8 @@ class MemberService(
 
     fun checkPassword(password1: String, password2: String) = password1 == password2
 
+    fun checkEnabled(email: String) = memberRepository.findByEmail(email).get().isEnabled
+
     @Transactional
     fun createMember(email: String, password: String, sno: String, name: String, birthDate: String) {
         emailService.sendEmailForm(email, name)
@@ -45,10 +47,5 @@ class MemberService(
         )
     }
 
-    fun login(loginDto: LoginDto): String {
-        val member: Optional<Member> =
-            loginDto.email?.let { memberRepository.findByEmail(it) } ?: throw Exception("존재하지 않는 이메일입니다.")
-        if (!passwordEncoder.matches(loginDto.password, member.get().password)) throw Exception("비밀번호가 일치하지 않습니다.")
-        return jwtUtils.generateJwtToken(loginDto.email)
-    }
+    fun login(loginDto: LoginDto) = jwtUtils.generateJwtToken(loginDto.email!!)
 }

@@ -66,7 +66,15 @@ class MemberController(
                 msg.append("${field.field} : $message\n")
             }
         }
-
+        if (!memberService.checkEmailDuplication(loginDto.email!!)) {
+            return ResponseEntity.badRequest().body("존재하지 않는 이메일입니다.")
+        }
+        if (!memberService.checkPassword(loginDto.password!!, loginDto.password!!)) {
+            return ResponseEntity.badRequest().body("비밀번호가 일치하지 않습니다.")
+        }
+        if (!memberService.checkEnabled(loginDto.email!!)) {
+            return ResponseEntity.badRequest().body("이메일 인증을 완료해주세요.")
+        }
         return ResponseEntity.ok(memberService.login(loginDto))
     }
 }
