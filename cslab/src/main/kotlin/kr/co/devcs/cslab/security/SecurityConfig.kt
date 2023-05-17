@@ -11,6 +11,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 
 @Configuration
 @EnableWebSecurity
@@ -23,6 +24,8 @@ class SecurityConfig(@Autowired private val jwtFilter: JwtFilter) {
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http.authorizeHttpRequests()
+            .requestMatchers("/api/member/admin/**").hasAnyAuthority("ADMIN")
+//            .requestMatchers(AntPathRequestMatcher("/api/member/admin/**")).hasRole("ADMIN")
             .requestMatchers("/api/member/auth").authenticated()
             .anyRequest().permitAll()
             .and()

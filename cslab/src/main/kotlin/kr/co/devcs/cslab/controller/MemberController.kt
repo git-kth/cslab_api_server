@@ -5,10 +5,17 @@ import kr.co.devcs.cslab.data.ChangePasswordRequest
 import kr.co.devcs.cslab.data.ChangePasswordResponse
 import kr.co.devcs.cslab.dto.LoginDto
 import kr.co.devcs.cslab.dto.MemberDto
+import kr.co.devcs.cslab.jwt.JwtUtils
+import kr.co.devcs.cslab.security.MemberDetails
+import kr.co.devcs.cslab.service.MemberDetailsService
 import kr.co.devcs.cslab.service.MemberService
 import kr.co.devcs.cslab.util.EmailService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.validation.BindingResult
 import org.springframework.validation.FieldError
 import org.springframework.validation.annotation.Validated
@@ -22,7 +29,9 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/member")
 class MemberController(
     @Autowired val memberService: MemberService,
-    @Autowired val emailService: EmailService
+    @Autowired val emailService: EmailService,
+    @Autowired val jwtUtils: JwtUtils,
+    @Autowired val memberDetailsService: MemberDetailsService
 ) {
     @PostMapping("/signup")
     fun signup(
@@ -148,4 +157,18 @@ class MemberController(
 
     @GetMapping("/auth")
     fun security() = "success"
+
+    @GetMapping("/admin/page")
+    fun adminPage(authentication: Authentication): ResponseEntity<String> {
+        val isAdmin = authentication.authorities.any { it.authority == "ADMIN" }
+        return if (isAdmin) {
+            ResponseEntity.ok("Welcome to the admin page!")
+        } else {
+            ResponseEntity.status(HttpStatus.FORBIDDEN).build()        }
+    }
+
+    @GetMapping("/admin/confirm")
+    fun adminconfirm(): String{
+        return "HI"
+    }
 }

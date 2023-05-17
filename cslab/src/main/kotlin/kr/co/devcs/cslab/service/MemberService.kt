@@ -70,7 +70,7 @@ fun changePassword(email: String, authNum: String, newPassword: String, confirmP
                 name = name,
                 birthDate = LocalDate.parse(birthDate, formatter),
                 roles = mutableSetOf(MemberRole.ROLE_USER),
-                isAdmin = true,
+                isAdmin = false,
                 isEnabled = false
             )
         )
