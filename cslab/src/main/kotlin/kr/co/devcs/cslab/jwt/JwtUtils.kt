@@ -7,10 +7,10 @@ import jakarta.servlet.http.HttpServletRequest
 import kr.co.devcs.cslab.service.MemberDetailsService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.stereotype.Component
 import java.util.*
 import javax.crypto.SecretKey
-
 
 @Component
 class JwtUtils(@Autowired private val memberDetailsService: MemberDetailsService) {
@@ -28,6 +28,10 @@ class JwtUtils(@Autowired private val memberDetailsService: MemberDetailsService
 
     fun getUserNameFromJwtToken(token: String): String {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).body.subject
+    }
+
+    fun getClaims(token: String): Claims {
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).body
     }
 
     fun validateJwtToken(authToken: String): Boolean {
@@ -49,9 +53,9 @@ class JwtUtils(@Autowired private val memberDetailsService: MemberDetailsService
     }
 
     fun getAuthentication(token: String): UsernamePasswordAuthenticationToken {
-        val userDetails = memberDetailsService.loadUserByUsername(getUserNameFromJwtToken(token))
-        val res = UsernamePasswordAuthenticationToken(userDetails, "", userDetails.authorities)
-        if (!userDetails.isEnabled) res.isAuthenticated = false
+        val memberDetails = memberDetailsService.loadUserByUsername(getUserNameFromJwtToken(token))
+        val res = UsernamePasswordAuthenticationToken(memberDetails, "", memberDetails.authorities)
+        if (!memberDetails.isEnabled) res.isAuthenticated = false
         return res
     }
 
@@ -61,5 +65,11 @@ class JwtUtils(@Autowired private val memberDetailsService: MemberDetailsService
             return bearerToken.substring(7)
         }
         return null
+    }
+    fun isAdminToken(token: String): Boolean {
+        val claims = getClaims(token)
+        val username = getUserNameFromJwtToken(token)
+        val memberDetails = memberDetailsService.loadUserByUsername(username)
+        return memberDetails.authorities.contains(SimpleGrantedAuthority("ADMIN")) && !claims.expiration.before(Date())
     }
 }
