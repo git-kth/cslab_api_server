@@ -7,12 +7,11 @@ import com.sendgrid.SendGrid
 import com.sendgrid.helpers.mail.Mail
 import com.sendgrid.helpers.mail.objects.Content
 import com.sendgrid.helpers.mail.objects.Email
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.stereotype.Service
 import java.time.Duration
 import java.time.LocalDateTime
 import java.util.*
-
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Service
 
 @Service
 class EmailService {
@@ -20,8 +19,7 @@ class EmailService {
 
     private val authCodes = mutableMapOf<String, AuthCode>()
 
-    @Value("\${SENDGRID_API_KEY}")
-    lateinit var api_key: String
+    @Value("\${SENDGRID_API_KEY}") lateinit var API_KEY: String
 
     fun createEmailCode(email: String): String {
         val random = Random()
@@ -46,7 +44,7 @@ class EmailService {
         val authCode = createEmailCode(email)
         val content = Content("text/plain", "and easy to do anywhere, even with Java [$authCode]")
         val mail = Mail(from, subject, to, content)
-        val sg = SendGrid(api_key)
+        val sg = SendGrid(API_KEY)
         val request = Request()
         request.method = Method.POST
         request.endpoint = "mail/send"
@@ -63,6 +61,6 @@ class EmailService {
         val createdAt = authCode.createdAt
         val now = LocalDateTime.now()
         val duration = Duration.between(createdAt, now)
-        return authCode.code == emailCode && duration.toMinutes() < 5
+        return authCode.code == emailCode && duration.toMinutes() < 1
     }
 }

@@ -50,7 +50,9 @@ class JwtUtils(@Autowired private val memberDetailsService: MemberDetailsService
 
     fun getAuthentication(token: String): UsernamePasswordAuthenticationToken {
         val memberDetails = memberDetailsService.loadUserByUsername(getUserNameFromJwtToken(token))
-        return UsernamePasswordAuthenticationToken(memberDetails, "", memberDetails.authorities)
+        val res = UsernamePasswordAuthenticationToken(memberDetails, "", memberDetails.authorities)
+        if (!memberDetails.isEnabled) res.isAuthenticated = false
+        return res
     }
 
     fun resolveToken(request: HttpServletRequest): String? {

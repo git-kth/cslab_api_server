@@ -17,9 +17,11 @@ class JwtFilter(@Autowired private val jwtUtils: JwtUtils) : OncePerRequestFilte
         filterChain: FilterChain
     ) {
         val token = jwtUtils.resolveToken(request)
+        println(token)
         if (token != null && jwtUtils.validateJwtToken(token)) {
             val authentication = jwtUtils.getAuthentication(token)
-            SecurityContextHolder.getContext().authentication = authentication
+            println(authentication.isAuthenticated)
+            if(authentication.isAuthenticated) SecurityContextHolder.getContext().authentication = authentication
         }
         filterChain.doFilter(request, response)
     }
