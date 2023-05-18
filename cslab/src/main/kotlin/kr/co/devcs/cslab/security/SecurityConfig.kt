@@ -23,6 +23,8 @@ class SecurityConfig(@Autowired private val jwtFilter: JwtFilter) {
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http.authorizeHttpRequests()
+            .requestMatchers("/api/member/admin/**").hasAnyAuthority("ADMIN")
+//            .requestMatchers(AntPathRequestMatcher("admin/**")).hasRole("ADMIN")
             .requestMatchers("/api/member/auth").authenticated()
             .anyRequest().permitAll()
             .and()

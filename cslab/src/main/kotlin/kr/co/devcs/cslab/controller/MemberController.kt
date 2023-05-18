@@ -2,32 +2,32 @@ package kr.co.devcs.cslab.controller
 
 import jakarta.servlet.http.HttpSession
 import kr.co.devcs.cslab.data.ChangePasswordRequest
-import kr.co.devcs.cslab.data.ChangePasswordResponse
 import kr.co.devcs.cslab.dto.LoginDto
 import kr.co.devcs.cslab.dto.MemberDto
+import kr.co.devcs.cslab.jwt.JwtUtils
+import kr.co.devcs.cslab.service.MemberDetailsService
 import kr.co.devcs.cslab.service.MemberService
 import kr.co.devcs.cslab.util.EmailService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.Authentication
 import org.springframework.validation.BindingResult
 import org.springframework.validation.FieldError
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
+data class MemberResponse(val data: MutableMap<String, String>, val errors: MutableList<String>)
 @RestController
 @RequestMapping("/api/member")
 class MemberController(
-        @Autowired val memberService: MemberService,
-        @Autowired val emailService: EmailService
+    @Autowired val memberService: MemberService,
+    @Autowired val emailService: EmailService,
 ) {
     @PostMapping("/signup")
     fun signup(
-            @RequestBody @Validated memberDto: MemberDto,
-            bindingResult: BindingResult
+        @RequestBody @Validated memberDto: MemberDto,
+        bindingResult: BindingResult
     ): ResponseEntity<String> {
         if (bindingResult.hasErrors()) {
             val msg = StringBuilder()
@@ -57,78 +57,60 @@ class MemberController(
             return ResponseEntity.badRequest().body(msg.toString())
         }
         memberService.createMember(
-                memberDto.email,
-                memberDto.password1,
-                memberDto.sno,
-                memberDto.name!!,
-                memberDto.birthDate!!
+            memberDto.email,
+            memberDto.password1,
+            memberDto.sno,
+            memberDto.name!!,
+            memberDto.birthDate!!
         )
         return ResponseEntity.ok("signup success")
     }
 
     @PostMapping("/find-email")
-    fun findId(@RequestBody memberDto: MemberDto): ResponseEntity<String> {
-        val sno = memberDto.sno ?: return ResponseEntity.badRequest().body("학번을 입력해주세요.")
-        val birthDate =
-                memberDto.birthDate ?: return ResponseEntity.badRequest().body("생년월일을 입력해주세요.")
+    fun findId(@RequestBody memberDto: MemberDto): ResponseEntity<MemberResponse> {
         val email =
-                memberService.findEmailBySnoAndBirthDate(sno, birthDate)
-                        ?: return ResponseEntity.notFound().build()
-        return ResponseEntity.ok(email)
+            memberService.findEmailBySnoAndBirthDate(memberDto.sno!!, memberDto.birthDate!!)
+                ?: return ResponseEntity.badRequest().body(MemberResponse(mutableMapOf(), mutableListOf("가입된 회원이 없습니다.")))
+        return ResponseEntity.ok().body(MemberResponse(mutableMapOf("email" to email), mutableListOf()))
     }
 
     @PostMapping("/find-password")
     fun findPassword(
-            @RequestBody memberDto: MemberDto,
-            session: HttpSession
-    ): ResponseEntity<String> {
-        val email = memberDto.email ?: return ResponseEntity.badRequest().body("이메일을 입력해 주세요.")
-        val member =
-                memberService.findByEmail(email).get()
-                        ?: return ResponseEntity.badRequest().body("가입된 회원이 없습니다.")
-        val authCode = emailService.sendEmailForm(email, member.name)
-        session.setAttribute("authNum", authCode)
-        session.setAttribute("email", email)
-        return ResponseEntity.ok(authCode)
+        @RequestBody memberDto: MemberDto,
+        session: HttpSession
+    ): ResponseEntity<MemberResponse> {
+        val memberOptional = memberService.findByEmail(memberDto.email!!)
+        return if (memberOptional.isPresent) {
+            val member = memberOptional.get()
+            val authCode = emailService.sendEmailForm(memberDto.email, member.name)
+            session.setAttribute("authNum", authCode)
+            session.setAttribute("email", memberDto.email)
+            return ResponseEntity.ok().body(MemberResponse(mutableMapOf("success" to "true"), mutableListOf()))
+        } else {
+            return ResponseEntity.badRequest().body(MemberResponse(mutableMapOf(), mutableListOf("가입된 회원이 없습니다.")))
+        }
     }
 
     @PostMapping("/change-password")
     fun changePassword(
-            @RequestBody changePasswordRequest: ChangePasswordRequest,
-            session: HttpSession
-    ): ResponseEntity<ChangePasswordResponse> {
-        val email =
-                changePasswordRequest.email
-                        ?: return ResponseEntity.badRequest()
-                                .body(ChangePasswordResponse(false, "이메일을 입력해 주세요."))
-        val authNum =
-                changePasswordRequest.authNum
-                        ?: return ResponseEntity.badRequest()
-                                .body(ChangePasswordResponse(false, "인증번호를 입력해 주세요."))
-        val newPassword =
-                changePasswordRequest.newPassword
-                        ?: return ResponseEntity.badRequest()
-                                .body(ChangePasswordResponse(false, "새로운 비밀번호를 입력해 주세요."))
-        val confirmPassword =
-                changePasswordRequest.confirmPassword
-                        ?: return ResponseEntity.badRequest()
-                                .body(ChangePasswordResponse(false, "새로운 비밀번호 확인을 입력해 주세요."))
-
+        @RequestBody changePasswordRequest: ChangePasswordRequest,
+        session: HttpSession
+    ): ResponseEntity<MemberResponse> {
         val response =
-                memberService.changePassword(email, authNum, newPassword, confirmPassword, session)
-        if (response.success) {
-            //            session.removeAttribute("authNum")
+            memberService.changePassword(changePasswordRequest.email!!,
+                changePasswordRequest.authNum!!, changePasswordRequest.newPassword!!, changePasswordRequest.confirmPassword!!, session)
+        return if (response.success) {
             session.invalidate()
-            return ResponseEntity.ok(response)
+            ResponseEntity.ok().body(MemberResponse(mutableMapOf("success" to "true"), mutableListOf()))
         } else {
-            return ResponseEntity.badRequest().body(response)
+            ResponseEntity.badRequest().body(MemberResponse(mutableMapOf(), mutableListOf(response.message)))
         }
     }
 
     @PostMapping("/login")
     fun login(
-            @RequestBody @Validated loginDto: LoginDto,
-            bindingResult: BindingResult
+        @RequestBody @Validated loginDto: LoginDto,
+        bindingResult: BindingResult
     ): ResponseEntity<String> {
         if (bindingResult.hasErrors()) {
             val msg = StringBuilder()
@@ -141,10 +123,10 @@ class MemberController(
         if (!memberService.checkEmailDuplication(loginDto.email!!)) {
             return ResponseEntity.badRequest().body("존재하지 않는 이메일입니다.")
         }
-        if (!memberService.checkPassword(loginDto.password!!, loginDto.password!!)) {
+        if (!memberService.checkPassword(loginDto.password!!, loginDto.password)) {
             return ResponseEntity.badRequest().body("비밀번호가 일치하지 않습니다.")
         }
-        if (!memberService.checkEnabled(loginDto.email!!)) {
+        if (!memberService.checkEnabled(loginDto.email)) {
             return ResponseEntity.badRequest().body("이메일 인증을 완료해주세요.")
         }
         return ResponseEntity.ok(memberService.login(loginDto))
@@ -152,4 +134,18 @@ class MemberController(
 
     @GetMapping("/auth")
     fun security() = "success"
+
+    @GetMapping("/admin/page")
+    fun adminPage(authentication: Authentication): ResponseEntity<String> {
+        val isAdmin = authentication.authorities.any { it.authority == "ADMIN" }
+        return if (isAdmin) {
+            ResponseEntity.ok("Welcome to the admin page!")
+        } else {
+            ResponseEntity.status(HttpStatus.FORBIDDEN).build()        }
+    }
+
+    @GetMapping("/admin/confirm")
+    fun adminconfirm(): String{
+        return "HI"
+    }
 }

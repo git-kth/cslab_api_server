@@ -25,5 +25,4 @@ class JwtFilter(@Autowired private val jwtUtils: JwtUtils) : OncePerRequestFilte
         }
         filterChain.doFilter(request, response)
     }
-
 }
