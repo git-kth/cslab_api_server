@@ -4,8 +4,6 @@ import jakarta.servlet.http.HttpSession
 import kr.co.devcs.cslab.data.ChangePasswordRequest
 import kr.co.devcs.cslab.dto.LoginDto
 import kr.co.devcs.cslab.dto.MemberDto
-import kr.co.devcs.cslab.jwt.JwtUtils
-import kr.co.devcs.cslab.service.MemberDetailsService
 import kr.co.devcs.cslab.service.MemberService
 import kr.co.devcs.cslab.util.EmailService
 import org.springframework.beans.factory.annotation.Autowired
@@ -80,7 +78,7 @@ class MemberController(
         session: HttpSession
     ): ResponseEntity<MemberResponse> {
         val memberOptional = memberService.findByEmail(memberDto.email!!)
-        return if (memberOptional.isPresent) {
+        if (memberOptional.isPresent) {
             val member = memberOptional.get()
             val authCode = emailService.sendEmailForm(memberDto.email, member.name)
             session.setAttribute("authNum", authCode)
@@ -111,7 +109,7 @@ class MemberController(
     fun login(
         @RequestBody @Validated loginDto: LoginDto,
         bindingResult: BindingResult
-    ): ResponseEntity<String> {
+    ): ResponseEntity<MemberResponse> {
         if (bindingResult.hasErrors()) {
             val msg = StringBuilder()
             bindingResult.allErrors.forEach {
@@ -121,15 +119,15 @@ class MemberController(
             }
         }
         if (!memberService.checkEmailDuplication(loginDto.email!!)) {
-            return ResponseEntity.badRequest().body("존재하지 않는 이메일입니다.")
+            return ResponseEntity.badRequest().body(MemberResponse(mutableMapOf(), mutableListOf("가입된 회원이 없습니다.")))
         }
         if (!memberService.checkPassword(loginDto.password!!, loginDto.password)) {
-            return ResponseEntity.badRequest().body("비밀번호가 일치하지 않습니다.")
+            return ResponseEntity.badRequest().body(MemberResponse(mutableMapOf(), mutableListOf("패스워드가 일치하지 않습니다.")))
         }
         if (!memberService.checkEnabled(loginDto.email)) {
-            return ResponseEntity.badRequest().body("이메일 인증을 완료해주세요.")
+            return ResponseEntity.badRequest().body(MemberResponse(mutableMapOf(), mutableListOf("이메일 인증을 완료해주세요.")))
         }
-        return ResponseEntity.ok(memberService.login(loginDto))
+        return ResponseEntity.ok(MemberResponse(mutableMapOf("token" to memberService.login(loginDto)), mutableListOf()))
     }
 
     @GetMapping("/auth")
