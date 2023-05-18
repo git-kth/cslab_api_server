@@ -2,11 +2,9 @@ package kr.co.devcs.cslab.controller
 
 import jakarta.servlet.http.HttpSession
 import kr.co.devcs.cslab.data.ChangePasswordRequest
-import kr.co.devcs.cslab.data.ChangePasswordResponse
 import kr.co.devcs.cslab.dto.LoginDto
 import kr.co.devcs.cslab.dto.MemberDto
 import kr.co.devcs.cslab.jwt.JwtUtils
-import kr.co.devcs.cslab.security.MemberDetails
 import kr.co.devcs.cslab.service.MemberDetailsService
 import kr.co.devcs.cslab.service.MemberService
 import kr.co.devcs.cslab.util.EmailService
@@ -14,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
-import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.validation.BindingResult
 import org.springframework.validation.FieldError
 import org.springframework.validation.annotation.Validated
@@ -25,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
+data class MemberResponse(val data: MutableMap<String, String>, val errors: MutableList<String>)
 @RestController
 @RequestMapping("/api/member")
 class MemberController(
@@ -76,31 +73,27 @@ class MemberController(
     }
 
     @PostMapping("/find-email")
-    fun findId(@RequestBody memberDto: MemberDto): ResponseEntity<String> {
-        val sno = memberDto.sno ?: return ResponseEntity.badRequest().body("학번을 입력해주세요.")
-        val birthDate =
-            memberDto.birthDate ?: return ResponseEntity.badRequest().body("생년월일을 입력해주세요.")
+    fun findId(@RequestBody memberDto: MemberDto): ResponseEntity<MemberResponse> {
         val email =
-            memberService.findEmailBySnoAndBirthDate(sno, birthDate)
-                ?: return ResponseEntity.notFound().build()
-        return ResponseEntity.ok(email)
+            memberService.findEmailBySnoAndBirthDate(memberDto.sno!!, memberDto.birthDate!!)
+                ?: return ResponseEntity.badRequest().body(MemberResponse(mutableMapOf(), mutableListOf("가입된 회원이 없습니다.")))
+        return ResponseEntity.ok().body(MemberResponse(mutableMapOf("email" to email), mutableListOf()))
     }
 
     @PostMapping("/find-password")
     fun findPassword(
         @RequestBody memberDto: MemberDto,
         session: HttpSession
-    ): ResponseEntity<String> {
-        val email = memberDto.email ?: return ResponseEntity.badRequest().body("이메일을 입력해 주세요.")
-        val memberOptional = memberService.findByEmail(email)
+    ): ResponseEntity<MemberResponse> {
+        val memberOptional = memberService.findByEmail(memberDto.email!!)
         return if (memberOptional.isPresent) {
             val member = memberOptional.get()
-            val authCode = emailService.sendEmailForm(email, member.name)
+            val authCode = emailService.sendEmailForm(memberDto.email!!, member.name)
             session.setAttribute("authNum", authCode)
-            session.setAttribute("email", email)
-            ResponseEntity.ok("ok")
+            session.setAttribute("email", memberDto.email!!)
+            return ResponseEntity.ok().body(MemberResponse(mutableMapOf("success" to "true"), mutableListOf()))
         } else {
-            ResponseEntity.badRequest().body("가입된 회원이 없습니다.")
+            return ResponseEntity.badRequest().body(MemberResponse(mutableMapOf(), mutableListOf("가입된 회원이 없습니다.")))
         }
     }
 
@@ -108,32 +101,15 @@ class MemberController(
     fun changePassword(
         @RequestBody changePasswordRequest: ChangePasswordRequest,
         session: HttpSession
-    ): ResponseEntity<ChangePasswordResponse> {
-        val email =
-            changePasswordRequest.email
-                ?: return ResponseEntity.badRequest()
-                    .body(ChangePasswordResponse(false, "이메일을 입력해 주세요."))
-        val authNum =
-            changePasswordRequest.authNum
-                ?: return ResponseEntity.badRequest()
-                    .body(ChangePasswordResponse(false, "인증번호를 입력해 주세요."))
-        val newPassword =
-            changePasswordRequest.newPassword
-                ?: return ResponseEntity.badRequest()
-                    .body(ChangePasswordResponse(false, "새로운 비밀번호를 입력해 주세요."))
-        val confirmPassword =
-            changePasswordRequest.confirmPassword
-                ?: return ResponseEntity.badRequest()
-                    .body(ChangePasswordResponse(false, "새로운 비밀번호 확인을 입력해 주세요."))
-
+    ): ResponseEntity<MemberResponse> {
         val response =
-            memberService.changePassword(email, authNum, newPassword, confirmPassword, session)
+            memberService.changePassword(changePasswordRequest.email!!,
+                changePasswordRequest.authNum!!, changePasswordRequest.newPassword!!, changePasswordRequest.confirmPassword!!, session)
         if (response.success) {
-            //            session.removeAttribute("authNum")
             session.invalidate()
-            return ResponseEntity.ok(response)
+            return ResponseEntity.ok().body(MemberResponse(mutableMapOf("success" to "true"), mutableListOf()))
         } else {
-            return ResponseEntity.badRequest().body(response)
+            return ResponseEntity.badRequest().body(MemberResponse(mutableMapOf(), mutableListOf(response.message)))
         }
     }
 
