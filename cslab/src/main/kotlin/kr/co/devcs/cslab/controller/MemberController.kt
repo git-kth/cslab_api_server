@@ -117,6 +117,7 @@ class MemberController(
                 val message = it.defaultMessage
                 msg.append("${field.field} : $message\n")
             }
+            return ResponseEntity.badRequest().body(MemberResponse(mutableMapOf(), mutableListOf(msg.toString())))
         }
         if (!memberService.checkEmailDuplication(loginDto.email!!)) {
             return ResponseEntity.badRequest().body(MemberResponse(mutableMapOf(), mutableListOf("가입된 회원이 없습니다.")))
