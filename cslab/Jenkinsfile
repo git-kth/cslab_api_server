@@ -2,6 +2,13 @@ node {
   stage('========== Clone repository ==========') {
     checkout scm
   }
+  stage('========== Build gradle ==========') {
+    dir ('cslab') {
+      withGradle {
+        sh 'gradlew bootJar'
+      }
+    }
+  }
   stage('========== Build image ==========') {
     app = docker.build("handawoon/cslab-api")
   }
