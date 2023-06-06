@@ -6,7 +6,7 @@ pipeline {
                 sshagent (credentials: ['DBLabJenkins']) {
                 sh """
                     ssh -p10022 -o StrictHostKeyChecking=no ${TARGET_HOST} '
-                        export JAVA_HOME=/home/hdw/.sdkman/candidates/java/current/bin
+                        export JAVA_HOME=/home/hdw/.sdkman/candidates/java/current
                         cd /home/hdw/docker.d/cslab_api
                         ./jenkins.sh
                     '
