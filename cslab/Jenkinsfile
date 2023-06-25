@@ -1,21 +1,20 @@
-node {
-  stage('========== Clone repository ==========') {
-    checkout scm
-  }
-  stage('========== Build gradle ==========') {
-    dir ('cslab') {
-      withGradle {
-        sh 'gradlew bootJar'
-      }
+pipeline {
+    agent any
+    stages {
+        stage('SSH Agent Command') {
+            steps {        
+                sshagent (credentials: ['DBLabJenkins']) {
+                sh """
+                    ssh -p10022 -o StrictHostKeyChecking=no ${TARGET_HOST} '
+                        cd /home/hdw/docker.d/cslab_api
+                        ./jenkins.sh
+                    '
+                """
+                }
+            }
+        }
     }
-  }
-  stage('========== Build image ==========') {
-    app = docker.build("handawoon/cslab-api")
-  }
-  stage('========== Push image ==========') {
-    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-      app.push("${env.BUILD_NUMBER}")
-      app.push("latest")
+    environment {
+        TARGET_HOST = "hdw@dawoony.com"
     }
-  }
 }
